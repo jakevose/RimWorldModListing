@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+
 namespace RimWorldModListing.Utilities
 {
     public class ListingProcessor
     {
+        private PathManager pathManager;
         private PlatformConfig paths;
 
         private ZipWrapper zip;
@@ -17,6 +20,8 @@ namespace RimWorldModListing.Utilities
         private string s3Bucket;
         private string cFDistribution;
 
+        private Dictionary<string, ModMeta> appliedMods;
+
         public ListingProcessor(string pageTitle,
                                 bool packageFlag,
                                 bool awsFlag,
@@ -29,9 +34,12 @@ namespace RimWorldModListing.Utilities
             s3Bucket = bucket;
             cFDistribution = distribution;
 
-            this.paths = new PathManager().GetPlatformPaths();
-            this.zip = new ZipWrapper();
-            this.aws = new AwsWrapper();
+            pathManager = new PathManager();
+            paths = pathManager.GetPaths();
+            zip = new ZipWrapper();
+            aws = new AwsWrapper();
+
+            appliedMods = new Dictionary<string, ModMeta>();
         }
 
         public void Run() {
@@ -50,7 +58,7 @@ namespace RimWorldModListing.Utilities
 
         private void LoadModFileListings()
         {
-            throw new NotImplementedException();
+
         }
 
         private void MapModsConfigToFilePaths()

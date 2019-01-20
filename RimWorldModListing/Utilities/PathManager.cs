@@ -5,11 +5,19 @@ namespace RimWorldModListing.Utilities
 {
     public class PathManager
     {
+        private PlatformConfig config;
+
         public PathManager()
         {
+            config = GetPlatformPaths();
         }
 
-        public PlatformConfig GetPlatformPaths()
+        public PlatformConfig GetPaths()
+        {
+            return config;
+        }
+
+        private PlatformConfig GetPlatformPaths()
         {
             string homePath;
 
@@ -34,5 +42,7 @@ namespace RimWorldModListing.Utilities
                     );
             }
         }
+
+        
     }
 }

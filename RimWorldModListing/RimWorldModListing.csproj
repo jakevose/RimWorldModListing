@@ -69,6 +69,7 @@
     <Compile Include="Utilities\ListingProcessor.cs" />
     <Compile Include="Utilities\PathManager.cs" />
     <Compile Include="Utilities\PlatformConfig.cs" />
+    <Compile Include="Utilities\ModMeta.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
