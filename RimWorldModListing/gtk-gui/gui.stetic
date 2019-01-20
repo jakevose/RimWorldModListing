@@ -75,6 +75,7 @@
             <property name="HasLabel">True</property>
             <property name="UseUnderline">True</property>
             <property name="FocusOnClick">False</property>
+            <signal name="Toggled" handler="OnAwsToggle" />
           </widget>
           <packing>
             <property name="Position">2</property>
@@ -86,7 +87,6 @@
         <child>
           <widget class="Gtk.HPaned" id="hProfile">
             <property name="MemberName" />
-            <property name="Sensitive">False</property>
             <property name="CanFocus">True</property>
             <property name="Position">164</property>
             <child>
@@ -119,7 +119,6 @@
         <child>
           <widget class="Gtk.HPaned" id="hBucket">
             <property name="MemberName" />
-            <property name="Sensitive">False</property>
             <property name="CanFocus">True</property>
             <property name="Position">164</property>
             <child>
@@ -152,7 +151,6 @@
         <child>
           <widget class="Gtk.HPaned" id="hDistribution">
             <property name="MemberName" />
-            <property name="Sensitive">False</property>
             <property name="CanFocus">True</property>
             <property name="Position">164</property>
             <child>
@@ -210,6 +208,7 @@
             <child>
               <widget class="Gtk.TextView" id="logTextView">
                 <property name="MemberName">logTextView</property>
+                <property name="Sensitive">False</property>
                 <property name="CanFocus">True</property>
                 <property name="ShowScrollbars">True</property>
                 <property name="Editable">False</property>

@@ -112,7 +112,6 @@ public partial class MainWindow
 		w6.Fill = false;
 		// Container child vbox1.Gtk.Box+BoxChild
 		this.hProfile = new global::Gtk.HPaned();
-		this.hProfile.Sensitive = false;
 		this.hProfile.CanFocus = true;
 		this.hProfile.Name = "hProfile";
 		this.hProfile.Position = 164;
@@ -139,7 +138,6 @@ public partial class MainWindow
 		w9.Fill = false;
 		// Container child vbox1.Gtk.Box+BoxChild
 		this.hBucket = new global::Gtk.HPaned();
-		this.hBucket.Sensitive = false;
 		this.hBucket.CanFocus = true;
 		this.hBucket.Name = "hBucket";
 		this.hBucket.Position = 164;
@@ -166,7 +164,6 @@ public partial class MainWindow
 		w12.Fill = false;
 		// Container child vbox1.Gtk.Box+BoxChild
 		this.hDistribution = new global::Gtk.HPaned();
-		this.hDistribution.Sensitive = false;
 		this.hDistribution.CanFocus = true;
 		this.hDistribution.Name = "hDistribution";
 		this.hDistribution.Position = 164;
@@ -212,6 +209,7 @@ public partial class MainWindow
 		this.GtkScrolledWindow.ShadowType = ((global::Gtk.ShadowType)(1));
 		// Container child GtkScrolledWindow.Gtk.Container+ContainerChild
 		this.logTextView = new global::Gtk.TextView();
+		this.logTextView.Sensitive = false;
 		this.logTextView.CanFocus = true;
 		this.logTextView.Name = "logTextView";
 		this.logTextView.Editable = false;
@@ -230,6 +228,7 @@ public partial class MainWindow
 		this.DefaultHeight = 390;
 		this.Show();
 		this.DeleteEvent += new global::Gtk.DeleteEventHandler(this.OnDeleteEvent);
+		this.cbAws.Toggled += new global::System.EventHandler(this.OnAwsToggle);
 		this.bGo.Clicked += new global::System.EventHandler(this.OnGo);
 	}
 }

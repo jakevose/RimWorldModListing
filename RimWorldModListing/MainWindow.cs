@@ -1,6 +1,5 @@
 ﻿using System;
 using Gtk;
-using System.Threading;
 
 public partial class MainWindow : Gtk.Window
 {
@@ -11,6 +10,7 @@ public partial class MainWindow : Gtk.Window
     public MainWindow() : base(Gtk.WindowType.Toplevel)
     {
         Build();
+        OnAwsToggle(null, null);
     }
 
     protected void OnDeleteEvent(object sender, DeleteEventArgs a)
@@ -37,8 +37,6 @@ public partial class MainWindow : Gtk.Window
 
         logLine(times++.ToString());
 
-        Thread.Sleep(2000);
-
         setControlsActive(true);
     }
 
@@ -51,19 +49,17 @@ public partial class MainWindow : Gtk.Window
 
     private void setControlsActive(bool active)
     {
-        hpaned1.Sensitive = active;
-        cbPackage.Sensitive = active;
-        cbAws.Sensitive = active;
+        vbox1.Sensitive = active;
 
-        hProfile.Sensitive = cbAws.Active ? active : false;
-        hBucket.Sensitive = cbAws.Active ? active : false;
-        hDistribution.Sensitive = cbAws.Active ? active : false;
+        OnAwsToggle(null, null);
     }
 
     protected void OnAwsToggle(object sender, EventArgs e)
-    { 
-        hProfile.Sensitive = cbAws.Active;
-        hBucket.Sensitive = cbAws.Active;
-        hDistribution.Sensitive = cbAws.Active;
+    {
+        var active = vbox1.Sensitive && cbAws.Active;
+
+        hProfile.Sensitive = active;
+        hBucket.Sensitive = active;
+        hDistribution.Sensitive = active;
     }
 }
