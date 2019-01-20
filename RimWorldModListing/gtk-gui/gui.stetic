@@ -16,24 +16,25 @@
     <child>
       <widget class="Gtk.VBox" id="vbox1">
         <property name="MemberName" />
-        <property name="Spacing">6</property>
+        <property name="Spacing">4</property>
+        <property name="BorderWidth">6</property>
         <child>
           <widget class="Gtk.HPaned" id="hpaned1">
             <property name="MemberName" />
             <property name="CanFocus">True</property>
-            <property name="Position">80</property>
+            <property name="Position">154</property>
             <child>
               <widget class="Gtk.Label" id="label1">
                 <property name="MemberName" />
-                <property name="Xalign">0.95</property>
-                <property name="LabelProp" translatable="yes">Page Title</property>
+                <property name="Xalign">0.9</property>
+                <property name="LabelProp" translatable="yes">Generated webpage title:</property>
               </widget>
               <packing>
                 <property name="Resize">False</property>
               </packing>
             </child>
             <child>
-              <widget class="Gtk.Entry" id="entry3">
+              <widget class="Gtk.Entry" id="ePageTitle">
                 <property name="MemberName" />
                 <property name="CanFocus">True</property>
                 <property name="IsEditable">True</property>
@@ -49,31 +50,14 @@
           </packing>
         </child>
         <child>
-          <widget class="Gtk.HPaned" id="hpaned2">
+          <widget class="Gtk.CheckButton" id="cbPackage">
             <property name="MemberName" />
             <property name="CanFocus">True</property>
-            <property name="Position">80</property>
-            <child>
-              <widget class="Gtk.Label" id="label2">
-                <property name="MemberName" />
-                <property name="Xalign">0.95</property>
-                <property name="LabelProp" translatable="yes">Package?</property>
-              </widget>
-              <packing>
-                <property name="Resize">False</property>
-              </packing>
-            </child>
-            <child>
-              <widget class="Gtk.CheckButton" id="checkbutton1">
-                <property name="MemberName" />
-                <property name="CanFocus">True</property>
-                <property name="Label" translatable="yes" />
-                <property name="DrawIndicator">True</property>
-                <property name="HasLabel">True</property>
-                <property name="UseUnderline">True</property>
-                <property name="FocusOnClick">False</property>
-              </widget>
-            </child>
+            <property name="Label" translatable="yes">Zip all mod files?</property>
+            <property name="DrawIndicator">True</property>
+            <property name="HasLabel">True</property>
+            <property name="UseUnderline">True</property>
+            <property name="FocusOnClick">False</property>
           </widget>
           <packing>
             <property name="Position">1</property>
@@ -83,31 +67,14 @@
           </packing>
         </child>
         <child>
-          <widget class="Gtk.HPaned" id="hpaned3">
+          <widget class="Gtk.CheckButton" id="cbAws">
             <property name="MemberName" />
             <property name="CanFocus">True</property>
-            <property name="Position">80</property>
-            <child>
-              <widget class="Gtk.Label" id="label3">
-                <property name="MemberName" />
-                <property name="Xalign">0.95</property>
-                <property name="LabelProp" translatable="yes">AWS?</property>
-              </widget>
-              <packing>
-                <property name="Resize">False</property>
-              </packing>
-            </child>
-            <child>
-              <widget class="Gtk.CheckButton" id="checkbutton2">
-                <property name="MemberName" />
-                <property name="CanFocus">True</property>
-                <property name="Label" translatable="yes" />
-                <property name="DrawIndicator">True</property>
-                <property name="HasLabel">True</property>
-                <property name="UseUnderline">True</property>
-                <property name="FocusOnClick">False</property>
-              </widget>
-            </child>
+            <property name="Label" translatable="yes">Upload to AWS? (NB: This costs you money!)</property>
+            <property name="DrawIndicator">True</property>
+            <property name="HasLabel">True</property>
+            <property name="UseUnderline">True</property>
+            <property name="FocusOnClick">False</property>
           </widget>
           <packing>
             <property name="Position">2</property>
@@ -117,14 +84,14 @@
           </packing>
         </child>
         <child>
-          <widget class="Gtk.HPaned" id="hpaned7">
+          <widget class="Gtk.HPaned" id="hProfile">
             <property name="MemberName" />
+            <property name="Sensitive">False</property>
             <property name="CanFocus">True</property>
             <property name="Position">164</property>
             <child>
-              <widget class="Gtk.Label" id="label4">
+              <widget class="Gtk.Label" id="lProfile">
                 <property name="MemberName" />
-                <property name="Sensitive">False</property>
                 <property name="Xalign">0.95</property>
                 <property name="LabelProp" translatable="yes">Named Profile</property>
                 <property name="Justify">Right</property>
@@ -134,9 +101,8 @@
               </packing>
             </child>
             <child>
-              <widget class="Gtk.Entry" id="entry4">
+              <widget class="Gtk.Entry" id="eProfile">
                 <property name="MemberName" />
-                <property name="Sensitive">False</property>
                 <property name="CanFocus">True</property>
                 <property name="IsEditable">True</property>
                 <property name="InvisibleChar">●</property>
@@ -151,14 +117,14 @@
           </packing>
         </child>
         <child>
-          <widget class="Gtk.HPaned" id="hpaned8">
+          <widget class="Gtk.HPaned" id="hBucket">
             <property name="MemberName" />
+            <property name="Sensitive">False</property>
             <property name="CanFocus">True</property>
             <property name="Position">164</property>
             <child>
-              <widget class="Gtk.Label" id="label5">
+              <widget class="Gtk.Label" id="lBucket">
                 <property name="MemberName" />
-                <property name="Sensitive">False</property>
                 <property name="Xalign">0.95</property>
                 <property name="LabelProp" translatable="yes">S3 Bucket</property>
                 <property name="Justify">Right</property>
@@ -168,9 +134,8 @@
               </packing>
             </child>
             <child>
-              <widget class="Gtk.Entry" id="entry5">
+              <widget class="Gtk.Entry" id="eBucket">
                 <property name="MemberName" />
-                <property name="Sensitive">False</property>
                 <property name="CanFocus">True</property>
                 <property name="IsEditable">True</property>
                 <property name="InvisibleChar">●</property>
@@ -185,14 +150,14 @@
           </packing>
         </child>
         <child>
-          <widget class="Gtk.HPaned" id="hpaned9">
+          <widget class="Gtk.HPaned" id="hDistribution">
             <property name="MemberName" />
+            <property name="Sensitive">False</property>
             <property name="CanFocus">True</property>
             <property name="Position">164</property>
             <child>
-              <widget class="Gtk.Label" id="label6">
+              <widget class="Gtk.Label" id="lDistribution">
                 <property name="MemberName" />
-                <property name="Sensitive">False</property>
                 <property name="Xalign">0.95</property>
                 <property name="LabelProp" translatable="yes">CloudFront Distribution</property>
                 <property name="Justify">Right</property>
@@ -202,9 +167,8 @@
               </packing>
             </child>
             <child>
-              <widget class="Gtk.Entry" id="entry6">
+              <widget class="Gtk.Entry" id="eDistribution">
                 <property name="MemberName" />
-                <property name="Sensitive">False</property>
                 <property name="CanFocus">True</property>
                 <property name="IsEditable">True</property>
                 <property name="InvisibleChar">●</property>
@@ -219,17 +183,23 @@
           </packing>
         </child>
         <child>
-          <widget class="Gtk.Button" id="button1">
+          <widget class="Gtk.Alignment" id="alignment1">
             <property name="MemberName" />
-            <property name="CanFocus">True</property>
-            <property name="Type">TextOnly</property>
-            <property name="Label" translatable="yes">GO!</property>
-            <property name="UseUnderline">True</property>
-            <signal name="Clicked" handler="OnGo" />
+            <child>
+              <widget class="Gtk.Button" id="bGo">
+                <property name="MemberName" />
+                <property name="CanFocus">True</property>
+                <property name="Type">TextOnly</property>
+                <property name="Label" translatable="yes">GO!</property>
+                <property name="UseUnderline">True</property>
+                <signal name="Clicked" handler="OnGo" />
+              </widget>
+            </child>
           </widget>
           <packing>
             <property name="Position">6</property>
-            <property name="AutoSize">False</property>
+            <property name="AutoSize">True</property>
+            <property name="Expand">False</property>
             <property name="Fill">False</property>
           </packing>
         </child>
