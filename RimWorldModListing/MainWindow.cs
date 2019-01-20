@@ -1,11 +1,10 @@
 ﻿using System;
 using Gtk;
+using RimWorldModListing.Utilities;
 
 public partial class MainWindow : Gtk.Window
 {
-    private int times = 0;
-    private object aws = null;
-    private object zip = null;
+    private ListingProcessor listingProcessor;
 
     public MainWindow() : base(Gtk.WindowType.Toplevel)
     {
@@ -19,35 +18,14 @@ public partial class MainWindow : Gtk.Window
         a.RetVal = true;
     }
 
-    protected void OnGo(object sender, EventArgs e)
-    {
-        setControlsActive(false);
-
-        //loadModFileListings();
-
-        //mapModsConfigToFilePaths();
-
-        //clearOutputDirectory();
-
-        //if (zip != null) { archiveMods(); }
-
-        //if (aws != null) { uploadFiles(); }
-
-        //generateHtmlListing();
-
-        logLine(times++.ToString());
-
-        setControlsActive(true);
-    }
-
-    private void logLine(String message)
+    private void LogLine(String message)
     {
         var textIter = logTextView.Buffer.EndIter;
         logTextView.Buffer.Insert(ref textIter, message + "\n");
         logTextView.ScrollToIter(logTextView.Buffer.EndIter, 0, false, 0, 0);
     }
 
-    private void setControlsActive(bool active)
+    private void SetControlsActive(bool active)
     {
         vbox1.Sensitive = active;
 
@@ -61,5 +39,27 @@ public partial class MainWindow : Gtk.Window
         hProfile.Sensitive = active;
         hBucket.Sensitive = active;
         hDistribution.Sensitive = active;
+    }
+
+    protected void OnButtonRelease(object sender, EventArgs e)
+    {
+        SetControlsActive(false);
+
+        listingProcessor = new ListingProcessor(ePageTitle.Text,
+                                                cbPackage.Active,
+                                                cbAws.Active,
+                                                eProfile.Text,
+                                                eBucket.Text,
+                                                eDistribution.Text);
+        try {
+            listingProcessor.Run();
+        }
+        catch (Exception ex)
+        {
+            LogLine(ex.Message);
+            LogLine(ex.StackTrace);
+        }
+
+        SetControlsActive(true);
     }
 }

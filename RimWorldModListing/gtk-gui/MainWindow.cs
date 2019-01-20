@@ -229,6 +229,6 @@ public partial class MainWindow
 		this.Show();
 		this.DeleteEvent += new global::Gtk.DeleteEventHandler(this.OnDeleteEvent);
 		this.cbAws.Toggled += new global::System.EventHandler(this.OnAwsToggle);
-		this.bGo.Clicked += new global::System.EventHandler(this.OnGo);
+		this.bGo.Released += new global::System.EventHandler(this.OnButtonRelease);
 	}
 }

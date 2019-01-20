@@ -64,9 +64,17 @@
     <Compile Include="gtk-gui\MainWindow.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utilities\AwsWrapper.cs" />
+    <Compile Include="Utilities\ZipWrapper.cs" />
+    <Compile Include="Utilities\ListingProcessor.cs" />
+    <Compile Include="Utilities\PathManager.cs" />
+    <Compile Include="Utilities\PlatformConfig.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Utilities\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

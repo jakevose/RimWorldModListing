@@ -190,7 +190,7 @@
                 <property name="Type">TextOnly</property>
                 <property name="Label" translatable="yes">GO!</property>
                 <property name="UseUnderline">True</property>
-                <signal name="Clicked" handler="OnGo" />
+                <signal name="Released" handler="OnButtonRelease" />
               </widget>
             </child>
           </widget>
