@@ -1,13 +1,21 @@
 ﻿using System;
+
+using System.Collections.Generic;
+
 using System.IO;
+
 using System.Linq;
 using System.Xml.Linq;
-using System.Collections.Generic;
+
+using ICSharpCode.SharpZipLib.Core;
+using ICSharpCode.SharpZipLib.Zip;
 
 namespace RimWorldModListing.Utilities
 {
     public class ListingProcessor
     {
+        private static string[] excludePaths = new string[] { ".git", ".idea", ".vs", "Source" };
+
         private MainWindow window;
 
         private PathManager pathManager;
@@ -109,7 +117,7 @@ namespace RimWorldModListing.Utilities
                 }
                 else
                 {
-                    window.LogLine($"WARN: mod location not found: {mod}");
+                    window.LogLine($"WARN: mod listed, but location not found: {mod}");
                 }
 
                 if (foundPath != null)
@@ -125,12 +133,68 @@ namespace RimWorldModListing.Utilities
 
         private void ClearOutputDirectory()
         {
-            throw new NotImplementedException();
+            if (Directory.Exists("Output"))
+            {
+                Directory.Delete("Output", true);
+                window.LogLine("Output directory destroyed.");
+            }
+
+            Directory.CreateDirectory("Output");
+
+            window.LogLine("Output directory recreated.");
         }
 
         private void ArchiveMods()
         {
-            throw new NotImplementedException();
+            FileStream fsOut = File.Create(Path.Combine("Output", "rimworld-mods.zip"));
+            using (ZipOutputStream zipStream = new ZipOutputStream(fsOut))
+            {
+                zipStream.SetLevel(5);
+
+                foreach (string mod in appliedModsMapping.Keys)
+                {
+                    ModMeta meta = appliedModsMapping[mod];
+
+                    window.LogLine($"Zipping: {mod}...");
+
+                    ArchiveMod(zipStream, meta, mod);
+                }
+            }
+
+            window.LogLine("Zipfile creation complete.");
+        }
+
+        private void ArchiveMod(ZipOutputStream zipStream, ModMeta meta, string relativePath)
+        {
+            foreach (string filePath in Directory.GetFiles(Path.Combine(meta.path, relativePath)))
+            {
+                string filename = Path.GetFileName(filePath);
+                ZipEntry newEntry = new ZipEntry(Path.Combine(relativePath, filename));
+
+                FileInfo fi = new FileInfo(filePath);
+                newEntry.DateTime = fi.LastWriteTime;
+                newEntry.Size = fi.Length;
+
+                zipStream.PutNextEntry(newEntry);
+
+                byte[] buffer = new byte[4096];
+                using (FileStream streamReader = File.OpenRead(filePath))
+                {
+                    StreamUtils.Copy(streamReader, zipStream, buffer);
+                }
+                zipStream.CloseEntry();
+
+                window.LogLine($"Zipped: {filePath}");
+            }
+
+            foreach (string directoryPath in Directory.GetDirectories(Path.Combine(meta.path, relativePath)))
+            {
+                DirectoryInfo directory = new DirectoryInfo(directoryPath);
+
+                if (!excludePaths.Contains(directory.Name)) {
+                    ArchiveMod(zipStream, meta, Path.Combine(relativePath, directory.Name));
+                }
+            }
         }
 
         private void UploadFiles()

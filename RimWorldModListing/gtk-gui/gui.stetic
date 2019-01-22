@@ -208,11 +208,9 @@
             <child>
               <widget class="Gtk.TextView" id="logTextView">
                 <property name="MemberName">logTextView</property>
-                <property name="Sensitive">False</property>
                 <property name="CanFocus">True</property>
                 <property name="ShowScrollbars">True</property>
                 <property name="Editable">False</property>
-                <property name="CursorVisible">False</property>
                 <property name="AcceptsTab">False</property>
                 <property name="Text" translatable="yes" />
               </widget>

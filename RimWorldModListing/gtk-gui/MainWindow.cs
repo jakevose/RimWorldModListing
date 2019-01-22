@@ -209,11 +209,9 @@ public partial class MainWindow
 		this.GtkScrolledWindow.ShadowType = ((global::Gtk.ShadowType)(1));
 		// Container child GtkScrolledWindow.Gtk.Container+ContainerChild
 		this.logTextView = new global::Gtk.TextView();
-		this.logTextView.Sensitive = false;
 		this.logTextView.CanFocus = true;
 		this.logTextView.Name = "logTextView";
 		this.logTextView.Editable = false;
-		this.logTextView.CursorVisible = false;
 		this.logTextView.AcceptsTab = false;
 		this.GtkScrolledWindow.Add(this.logTextView);
 		this.vbox1.Add(this.GtkScrolledWindow);

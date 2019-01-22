@@ -1,5 +1,8 @@
-﻿using System;
-using Gtk;
+﻿using Gtk;
+
+using System;
+using System.Threading;
+
 using RimWorldModListing.Utilities;
 
 public partial class MainWindow : Gtk.Window
@@ -23,6 +26,9 @@ public partial class MainWindow : Gtk.Window
         var textIter = logTextView.Buffer.EndIter;
         logTextView.Buffer.Insert(ref textIter, message + "\n");
         logTextView.ScrollToIter(logTextView.Buffer.EndIter, 0, false, 0, 0);
+
+        while (Gtk.Application.EventsPending())
+            Gtk.Application.RunIteration();
     }
 
     private void SetControlsActive(bool active)
