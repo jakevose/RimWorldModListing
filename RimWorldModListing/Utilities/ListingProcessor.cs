@@ -192,7 +192,20 @@ $@"      <li>{meta.name} <i>by {meta.author}</i></li>
 @"    </ol>
 ");
 
-            //builder.Append(DownloadLinks());
+            if (aws != null)
+            {
+                builder.Append(
+$@"    <h1>Download Links</h1>
+    <ul>
+      <li>
+        <a target='_blank\' href='./ModsConfig.xml'>ModsConfig.xml</a>
+      </li>
+      <li>
+        <a target='_blank\' href='./rimworld-mods.zip'>rimworld-mods.zip</a>
+      </li>
+    </ul>
+");
+            }
 
             builder.Append(
 $@"    <br/><br/>
