@@ -17,6 +17,13 @@ namespace RimWorldModListing.Utilities
             return config;
         }
 
+        public bool ValidPaths()
+        {
+            return Directory.Exists(config.gameModsPath) &&
+                   Directory.Exists(config.workshopPath) &&
+                   File.Exists(config.modsConfigPath);
+        }
+
         private PlatformConfig GetPlatformPaths()
         {
             string homePath;
@@ -42,7 +49,5 @@ namespace RimWorldModListing.Utilities
                     );
             }
         }
-
-        
     }
 }

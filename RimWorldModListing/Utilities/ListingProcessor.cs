@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Linq;
+using System.Xml.Linq;
 using System.Collections.Generic;
 
 namespace RimWorldModListing.Utilities
 {
     public class ListingProcessor
     {
+        private MainWindow window;
+
         private PathManager pathManager;
         private PlatformConfig paths;
 
@@ -20,13 +24,16 @@ namespace RimWorldModListing.Utilities
         private string s3Bucket;
         private string cFDistribution;
 
-        private Dictionary<string, ModMeta> appliedMods;
+        private List<string> listedMods;
+        private Dictionary<string, ModMeta> appliedModsMapping;
 
-        public ListingProcessor(string pageTitle,
+        public ListingProcessor(MainWindow mainWindow,
+                                string pageTitle,
                                 bool packageFlag,
                                 bool awsFlag,
                                 string profile, string bucket, string distribution)
         {
+            window = mainWindow;
             title = pageTitle;
             doPackage = packageFlag;
             doAws = awsFlag;
@@ -39,10 +46,12 @@ namespace RimWorldModListing.Utilities
             zip = new ZipWrapper();
             aws = new AwsWrapper();
 
-            appliedMods = new Dictionary<string, ModMeta>();
+            listedMods = new List<string>();
+            appliedModsMapping = new Dictionary<string, ModMeta>();
         }
 
         public void Run() {
+
             LoadModFileListings();
 
             MapModsConfigToFilePaths();
@@ -58,7 +67,27 @@ namespace RimWorldModListing.Utilities
 
         private void LoadModFileListings()
         {
+            if (pathManager.ValidPaths())
+            {
+                window.LogLine("Paths validate, fetching listings...");
 
+                XElement root = XElement.Load(paths.modsConfigPath);
+                IEnumerable<String> mods =
+                    from li in root.Descendants("li")
+                    select (string)li;
+                foreach (string mod in mods)
+                {
+                    if (mod != "Core")
+                    {
+                        listedMods.Add(mod);
+                    }
+                }
+
+                window.LogLine($"{mods.Count()} mods loaded.");
+            } else
+            {
+                throw new ApplicationException("There's something wrong with the mod/config paths, please report this error!");
+            }
         }
 
         private void MapModsConfigToFilePaths()

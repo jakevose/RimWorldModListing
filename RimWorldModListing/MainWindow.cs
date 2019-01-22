@@ -18,7 +18,7 @@ public partial class MainWindow : Gtk.Window
         a.RetVal = true;
     }
 
-    private void LogLine(String message)
+    public void LogLine(String message)
     {
         var textIter = logTextView.Buffer.EndIter;
         logTextView.Buffer.Insert(ref textIter, message + "\n");
@@ -45,7 +45,8 @@ public partial class MainWindow : Gtk.Window
     {
         SetControlsActive(false);
 
-        listingProcessor = new ListingProcessor(ePageTitle.Text,
+        listingProcessor = new ListingProcessor(this,
+                                                ePageTitle.Text,
                                                 cbPackage.Active,
                                                 cbAws.Active,
                                                 eProfile.Text,
