@@ -1,21 +1,17 @@
 ﻿using System;
 
-using System.Collections.Generic;
-
 using System.IO;
+
+using System.Collections.Generic;
 
 using System.Linq;
 using System.Xml.Linq;
-
-using ICSharpCode.SharpZipLib.Core;
-using ICSharpCode.SharpZipLib.Zip;
+using System.Text;
 
 namespace RimWorldModListing.Utilities
 {
     public class ListingProcessor
     {
-        private static string[] excludePaths = new string[] { ".git", ".idea", ".vs", "Source" };
-
         private MainWindow window;
 
         private PathManager pathManager;
@@ -52,8 +48,9 @@ namespace RimWorldModListing.Utilities
 
             pathManager = new PathManager();
             paths = pathManager.GetPaths();
-            zip = new ZipWrapper();
-            aws = new AwsWrapper();
+
+            if (packageFlag) { zip = new ZipWrapper(window); }
+            if (awsFlag) { aws = new AwsWrapper(window); }
 
             listedMods = new List<string>();
             appliedModsMapping = new Dictionary<string, ModMeta>();
@@ -67,11 +64,17 @@ namespace RimWorldModListing.Utilities
 
             ClearOutputDirectory();
 
-            if (zip != null) { ArchiveMods(); }
-
-            if (aws != null) { UploadFiles(); }
+            string zipFile = null;
+            if (zip != null)
+            {
+                zipFile = zip.ArchiveMods(appliedModsMapping); ;
+            }
 
             GenerateHtmlListing();
+
+            if (aws != null) {
+                aws.UploadFiles(appliedModsMapping, zipFile);
+            }
         }
 
         private void LoadModFileListings()
@@ -144,67 +147,63 @@ namespace RimWorldModListing.Utilities
             window.LogLine("Output directory recreated.");
         }
 
-        private void ArchiveMods()
-        {
-            FileStream fsOut = File.Create(Path.Combine("Output", "rimworld-mods.zip"));
-            using (ZipOutputStream zipStream = new ZipOutputStream(fsOut))
-            {
-                zipStream.SetLevel(5);
-
-                foreach (string mod in appliedModsMapping.Keys)
-                {
-                    ModMeta meta = appliedModsMapping[mod];
-
-                    window.LogLine($"Zipping: {mod}...");
-
-                    ArchiveMod(zipStream, meta, mod);
-                }
-            }
-
-            window.LogLine("Zipfile creation complete.");
-        }
-
-        private void ArchiveMod(ZipOutputStream zipStream, ModMeta meta, string relativePath)
-        {
-            foreach (string filePath in Directory.GetFiles(Path.Combine(meta.path, relativePath)))
-            {
-                string filename = Path.GetFileName(filePath);
-                ZipEntry newEntry = new ZipEntry(Path.Combine(relativePath, filename));
-
-                FileInfo fi = new FileInfo(filePath);
-                newEntry.DateTime = fi.LastWriteTime;
-                newEntry.Size = fi.Length;
-
-                zipStream.PutNextEntry(newEntry);
-
-                byte[] buffer = new byte[4096];
-                using (FileStream streamReader = File.OpenRead(filePath))
-                {
-                    StreamUtils.Copy(streamReader, zipStream, buffer);
-                }
-                zipStream.CloseEntry();
-
-                window.LogLine($"Zipped: {filePath}");
-            }
-
-            foreach (string directoryPath in Directory.GetDirectories(Path.Combine(meta.path, relativePath)))
-            {
-                DirectoryInfo directory = new DirectoryInfo(directoryPath);
-
-                if (!excludePaths.Contains(directory.Name)) {
-                    ArchiveMod(zipStream, meta, Path.Combine(relativePath, directory.Name));
-                }
-            }
-        }
-
-        private void UploadFiles()
-        {
-            throw new NotImplementedException();
-        }
-
         private void GenerateHtmlListing()
         {
-            throw new NotImplementedException();
+            StringBuilder builder = new StringBuilder();
+
+            builder.Append(
+$@"<html>
+  <head>
+    <title>{title}</title>
+  </head>
+  <body>
+");
+
+            if (title != null && title != "")
+            {
+                builder.Append(
+$@"    <h1>{title}</h1>
+");
+            }
+
+            builder.Append(
+@"    <ol>
+");
+
+            foreach (string mod in appliedModsMapping.Keys)
+            {
+                ModMeta meta = appliedModsMapping[mod];
+
+                if (meta.workshop != null)
+                {
+                    builder.Append(
+$@"      <li><a target='_blank\' href='{meta.workshop}'>{meta.name}</a> <i>by {meta.author}</i></li>
+");
+                }
+                else
+                {
+                    builder.Append(
+$@"      <li>{meta.name} <i>by {meta.author}</i></li>
+");
+                }
+            }
+
+            builder.Append(
+@"    </ol>
+");
+
+            //builder.Append(DownloadLinks());
+
+            builder.Append(
+$@"    <br/><br/>
+    <i>Last updated: {DateTime.Now.ToLongDateString()}</i>
+  </body>
+</html>
+");
+
+            File.WriteAllText(Path.Combine("Output", "index.html"), builder.ToString());
+
+            window.LogLine("HTML generation completed.");
         }
     }
 }
