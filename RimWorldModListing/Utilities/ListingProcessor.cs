@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 using System.Collections.Generic;
@@ -92,7 +93,34 @@ namespace RimWorldModListing.Utilities
 
         private void MapModsConfigToFilePaths()
         {
-            throw new NotImplementedException();
+            var gameDirMods = Directory.EnumerateDirectories(paths.gameModsPath).Select(p => Path.GetFileName(p));
+            var workshopMods = Directory.EnumerateDirectories(paths.workshopPath).Select(p => Path.GetFileName(p));
+
+            foreach (string mod in listedMods)
+            {
+                string foundPath = null;
+                if (mod != "Core" && gameDirMods.Contains(mod))
+                {
+                    foundPath = paths.gameModsPath;
+                }
+                else if (workshopMods.Contains(mod))
+                {
+                    foundPath = paths.workshopPath;
+                }
+                else
+                {
+                    window.LogLine($"WARN: mod location not found: {mod}");
+                }
+
+                if (foundPath != null)
+                {
+                    XElement root = XElement.Load(Path.Combine(foundPath, mod, "About", "About.xml"));
+                    string name = root.Element("name").Value;
+                    string author = root.Element("author").Value;
+
+                    appliedModsMapping.Add(mod, new ModMeta(mod, paths.workshopPath, name, author, mod));
+                }
+            }
         }
 
         private void ClearOutputDirectory()

@@ -15,7 +15,7 @@ namespace RimWorldModListing.Utilities
             path = p;
             name = n;
             author = a;
-            workshop = w;
+            workshop = (w == null ? null : $"https://steamcommunity.com/sharedfiles/filedetails/?id={w}" );
         }
     }
 }
