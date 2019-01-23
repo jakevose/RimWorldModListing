@@ -50,7 +50,7 @@ namespace RimWorldModListing.Utilities
             paths = pathManager.GetPaths();
 
             if (packageFlag) { zip = new ZipWrapper(window); }
-            if (awsFlag) { aws = new AwsWrapper(window); }
+            if (awsFlag) { aws = new AwsWrapper(window, namedProfile, s3Bucket); }
 
             listedMods = new List<string>();
             appliedModsMapping = new Dictionary<string, ModMeta>();
@@ -73,7 +73,7 @@ namespace RimWorldModListing.Utilities
             GenerateHtmlListing();
 
             if (aws != null) {
-                aws.UploadFiles(appliedModsMapping, zipFile);
+                aws.UploadFiles(paths.modsConfigPath, zipFile);
             }
         }
 
