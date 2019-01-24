@@ -50,12 +50,13 @@ namespace RimWorldModListing.Utilities
             paths = pathManager.GetPaths();
 
             if (packageFlag) { zip = new ZipWrapper(window); }
-            if (awsFlag) { aws = new AwsWrapper(window, namedProfile, s3Bucket); }
+            if (awsFlag) { aws = new AwsWrapper(window, namedProfile, s3Bucket, cFDistribution); }
 
             listedMods = new List<string>();
             appliedModsMapping = new Dictionary<string, ModMeta>();
         }
 
+        // The brains of the operation. Start here.
         public void Run() {
 
             LoadModFileListings();

@@ -2,10 +2,12 @@
 using System.IO;
 using System.Collections.Generic;
 
-using Amazon.S3;
-using Amazon.CloudFront;
-using Amazon.Runtime;
 using Amazon;
+using Amazon.Runtime;
+using Amazon.S3;
+using Amazon.S3.Model;
+using Amazon.CloudFront;
+using Amazon.CloudFront.Model;
 
 namespace RimWorldModListing.Utilities
 {
@@ -16,8 +18,9 @@ namespace RimWorldModListing.Utilities
         private AmazonCloudFrontClient cf;
 
         string s3Bucket;
+        string cfDistribution;
 
-        public AwsWrapper(MainWindow window, string profile, string bucket)
+        public AwsWrapper(MainWindow window, string profile, string bucket, string distribution)
         {
             win = window;
 
@@ -28,6 +31,7 @@ namespace RimWorldModListing.Utilities
                 cf = new AmazonCloudFrontClient(credentials, RegionEndpoint.USEast1);
 
                 s3Bucket = bucket;
+                cfDistribution = distribution;
             }
             catch (Exception e)
             {
@@ -57,22 +61,51 @@ namespace RimWorldModListing.Utilities
             }
         }
 
+        public void RefreshCloudFrontDistribution()
+        {
+            if (cfDistribution != null && cfDistribution.Length > 5)
+            {
+                RefreshExistingCloudFrontDistribution();
+            }
+        }
+
         private void pushFile(string filename, string path)
         {
-            s3.PutObject(new Amazon.S3.Model.PutObjectRequest
+            s3.PutObject(new PutObjectRequest
             {
                 BucketName = s3Bucket,
                 Key = filename,
                 FilePath = path
             });
 
-            s3.PutACL(new Amazon.S3.Model.PutACLRequest
+            s3.PutACL(new PutACLRequest
             {
                 BucketName = s3Bucket,
                 Key = filename,
                 CannedACL = S3CannedACL.Private
             });
+        }
 
+        private void RefreshExistingCloudFrontDistribution()
+        {
+            InvalidationBatch newInvalidationBatch = new InvalidationBatch();
+
+            newInvalidationBatch.Paths.Quantity = 1;
+            newInvalidationBatch.Paths.Items = new List<string>();
+            newInvalidationBatch.Paths.Items.Add("/*");
+
+            newInvalidationBatch.CallerReference = $"website_update_{DateTime.Now.ToShortDateString()}";
+
+            cf.CreateInvalidation(new CreateInvalidationRequest { 
+                DistributionId = cfDistribution,
+                InvalidationBatch = newInvalidationBatch
+            });
+
+            GetDistributionResponse distResponse = cf.GetDistribution(new GetDistributionRequest {
+                Id = cfDistribution
+            });
+
+            win.LogLine($"Distribution refreshed, URL reminder: {distResponse.Distribution.DomainName}");
         }
     }
 }
