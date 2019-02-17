@@ -1,7 +1,6 @@
 ﻿using Gtk;
 
 using System;
-using System.Threading;
 
 using RimWorldModListing.Utilities;
 
@@ -12,6 +11,7 @@ public partial class MainWindow : Gtk.Window
     public MainWindow() : base(Gtk.WindowType.Toplevel)
     {
         Build();
+
         OnAwsToggle(null, null);
     }
 

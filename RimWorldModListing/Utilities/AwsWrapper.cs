@@ -91,8 +91,7 @@ namespace RimWorldModListing.Utilities
             InvalidationBatch newInvalidationBatch = new InvalidationBatch();
 
             newInvalidationBatch.Paths.Quantity = 1;
-            newInvalidationBatch.Paths.Items = new List<string>();
-            newInvalidationBatch.Paths.Items.Add("/*");
+            newInvalidationBatch.Paths.Items = new List<string> { "/*" };
 
             newInvalidationBatch.CallerReference = $"website_update_{DateTime.Now.ToShortDateString()}";
 

@@ -1,5 +1,4 @@
-﻿using System;
-using Gtk;
+﻿using Gtk;
 
 namespace RimWorldModListing
 {
@@ -10,6 +9,7 @@ namespace RimWorldModListing
             Application.Init();
             MainWindow win = new MainWindow();
             win.Show();
+
             Application.Run();
         }
     }
