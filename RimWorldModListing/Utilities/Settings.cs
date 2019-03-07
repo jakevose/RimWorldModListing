@@ -12,30 +12,49 @@ namespace RimWorldModListing.Utilities
     {
         private static ISettings AppSettings
         {
-            get
-            {
-                return CrossSettings.Current;
-            }
+            get => CrossSettings.Current;
         }
 
-        #region Setting Constants
-
-        private const string SettingsKey = "rimworld_mod_list_settings";
-        private static readonly string SettingsDefault = string.Empty;
-
-        #endregion
-
-
-        public static string GeneralSettings
+        public static string PageTitle
         {
-            get
-            {
-                return AppSettings.GetValueOrDefault(SettingsKey, SettingsDefault);
-            }
-            set
-            {
-                AppSettings.AddOrUpdateValue(SettingsKey, value);
-            }
+            get => AppSettings.GetValueOrDefault(nameof(PageTitle), string.Empty);
+
+            set => AppSettings.AddOrUpdateValue(nameof(PageTitle), value);
+        }
+
+        public static bool Package
+        {
+            get => AppSettings.GetValueOrDefault(nameof(Package), false);
+
+            set => AppSettings.AddOrUpdateValue(nameof(Package), value);
+        }
+
+        public static bool Aws
+        {
+            get => AppSettings.GetValueOrDefault(nameof(Aws), false);
+
+            set => AppSettings.AddOrUpdateValue(nameof(Aws), value);
+        }
+
+        public static string Profile
+        {
+            get => AppSettings.GetValueOrDefault(nameof(Profile), string.Empty);
+
+            set => AppSettings.AddOrUpdateValue(nameof(Profile), value);
+        }
+
+        public static string Bucket
+        {
+            get => AppSettings.GetValueOrDefault(nameof(Bucket), string.Empty);
+
+            set => AppSettings.AddOrUpdateValue(nameof(Bucket), value);
+        }
+
+        public static string Distribution
+        {
+            get => AppSettings.GetValueOrDefault(nameof(Distribution), string.Empty);
+
+            set => AppSettings.AddOrUpdateValue(nameof(Distribution), value);
         }
 
     }

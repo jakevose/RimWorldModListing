@@ -35,7 +35,7 @@ namespace RimWorldModListing.Utilities
             }
             catch (Exception e)
             {
-                window.LogLine(e.Message);
+                win.LogLine(e.Message);
                 throw;
             }
         }
@@ -43,21 +43,30 @@ namespace RimWorldModListing.Utilities
         public void UploadFiles(string modsConfigPath, string zipFile)
         {
             win.LogLine($"Uploading HTML index page...");
-            pushFile("index.html", Path.Combine("Output", "index.html"));
 
-            if (zipFile == null)
+            try
             {
-                win.LogLine("Pushed HTML index page.");
+                pushFile("index.html", Path.Combine("Output", "index.html"));
+
+                if (zipFile == null)
+                {
+                    win.LogLine("Pushed HTML index page.");
+                }
+                else
+                {
+                    win.LogLine($"Pushed HTML index page. Uploading {zipFile}...");
+                    pushFile("rimworld-mods.zip", zipFile);
+
+                    win.LogLine($"Pushed {zipFile}. Pushing ModsConfig.xml...");
+                    pushFile("ModsConfig.xml", modsConfigPath);
+
+                    win.LogLine($"Pushed ModsConfig.xml.");
+                }
             }
-            else
+            catch (Exception e)
             {
-                win.LogLine($"Pushed HTML index page. Uploading {zipFile}...");
-                pushFile("rimworld-mods.zip", zipFile);
-
-                win.LogLine($"Pushed {zipFile}. Pushing ModsConfig.xml...");
-                pushFile("ModsConfig.xml", modsConfigPath);
-
-                win.LogLine($"Pushed ModsConfig.xml.");
+                win.LogLine(e.Message);
+                throw;
             }
         }
 
@@ -88,23 +97,33 @@ namespace RimWorldModListing.Utilities
 
         private void RefreshExistingCloudFrontDistribution()
         {
-            InvalidationBatch newInvalidationBatch = new InvalidationBatch();
+            try
+            {
+                InvalidationBatch newInvalidationBatch = new InvalidationBatch();
 
-            newInvalidationBatch.Paths.Quantity = 1;
-            newInvalidationBatch.Paths.Items = new List<string> { "/*" };
+                newInvalidationBatch.Paths.Quantity = 1;
+                newInvalidationBatch.Paths.Items = new List<string> { "/*" };
 
-            newInvalidationBatch.CallerReference = $"website_update_{DateTime.Now.ToShortDateString()}";
+                newInvalidationBatch.CallerReference = $"website_update_{DateTime.Now.ToShortDateString()}";
 
-            cf.CreateInvalidation(new CreateInvalidationRequest { 
-                DistributionId = cfDistribution,
-                InvalidationBatch = newInvalidationBatch
-            });
+                cf.CreateInvalidation(new CreateInvalidationRequest
+                {
+                    DistributionId = cfDistribution,
+                    InvalidationBatch = newInvalidationBatch
+                });
 
-            GetDistributionResponse distResponse = cf.GetDistribution(new GetDistributionRequest {
-                Id = cfDistribution
-            });
+                GetDistributionResponse distResponse = cf.GetDistribution(new GetDistributionRequest
+                {
+                    Id = cfDistribution
+                });
 
-            win.LogLine($"Distribution refreshed, URL reminder: {distResponse.Distribution.DomainName}");
+                win.LogLine($"Distribution refreshed, URL reminder: {distResponse.Distribution.DomainName}");
+            }
+            catch (Exception e)
+            {
+                win.LogLine(e.Message);
+                throw;
+            }
         }
     }
 }

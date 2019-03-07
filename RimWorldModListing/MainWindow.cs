@@ -12,6 +12,13 @@ public partial class MainWindow : Gtk.Window
     {
         Build();
 
+        ePageTitle.Text = RimWorldModListing.Utilities.Settings.PageTitle;
+        cbPackage.Active = RimWorldModListing.Utilities.Settings.Package;
+        cbAws.Active = RimWorldModListing.Utilities.Settings.Aws;
+        eProfile.Text = RimWorldModListing.Utilities.Settings.Profile;
+        eBucket.Text = RimWorldModListing.Utilities.Settings.Bucket;
+        eDistribution.Text = RimWorldModListing.Utilities.Settings.Distribution;
+
         OnAwsToggle(null, null);
     }
 
@@ -59,6 +66,13 @@ public partial class MainWindow : Gtk.Window
                                                 eBucket.Text,
                                                 eDistribution.Text);
         try {
+            RimWorldModListing.Utilities.Settings.PageTitle = ePageTitle.Text;
+            RimWorldModListing.Utilities.Settings.Package = cbPackage.Active;
+            RimWorldModListing.Utilities.Settings.Aws = cbAws.Active;
+            RimWorldModListing.Utilities.Settings.Profile = eProfile.Text;
+            RimWorldModListing.Utilities.Settings.Bucket = eBucket.Text;
+            RimWorldModListing.Utilities.Settings.Distribution = eDistribution.Text;
+
             listingProcessor.Run();
         }
         catch (Exception ex)

@@ -75,6 +75,7 @@ namespace RimWorldModListing.Utilities
 
             if (aws != null) {
                 aws.UploadFiles(paths.modsConfigPath, zipFile);
+                aws.RefreshCloudFrontDistribution();
             }
         }
 
@@ -217,7 +218,8 @@ $@"    <br/><br/>
 
             File.WriteAllText(Path.Combine("Output", "index.html"), builder.ToString());
 
-            window.LogLine("HTML generation completed.");
+            window.LogLine("HTML generation completed. Find your file(s) in:");
+            window.LogLine(Path.GetFullPath("Output"));
         }
     }
 }
