@@ -1,5 +1,4 @@
-﻿=================================
-RimWorld Mod Listing Generator
+﻿RimWorld Mod Listing Generator
 =================================
 
 I enjoy playing with a lot of mods (as many do, these days) and wanted to find a way to package the mods along with ModsConfig.xml to preserve load order.
